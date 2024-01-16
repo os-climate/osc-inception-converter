@@ -1,8 +1,8 @@
 ==================
-osc-data-extractor
+osc-inception-converter
 ==================
 
-This is the documentation of **osc-data-extractor**.
+This is the documentation of **osc-inception-converter**.
 
 .. note::
 
