@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# set -x
+# set -x
+
+THIS_SCRIPT=$(basename "$0")
+echo "This script: $SELF"
+
+TEMPLATE_NAME=osc-data-extraction
+ALT_TEMPLATE_NAME="${TEMPLATE_NAME//-/_}"
 
 ### Shared functions
 
 # Renames files/folders containing template name
 rename_object() {
     if [ $# -ne 1 ]; then
-        echo "Function requires an argumeent: rename_object [filesystem object]"; exit 1
+        echo "Function requires an argument: rename_object [filesystem object]"; exit 1
     else
         FS_OBJECT="$1"
     fi
@@ -48,6 +54,21 @@ file_content_substitution() {
     else
         FILENAME="$1"
     fi
+
+    # Do not modify self!
+    BASE_FILENAME=$(basename "$FILENAME")
+    if [ "$BASE_FILENAME" = "$THIS_SCRIPT" ]; then
+        echo "Skipping self: $THIS_SCRIPT"
+        return
+    fi
+
+    if [ "$BASE_FILENAME" != "pyproject.toml" ]; then
+        return
+    else
+        echo "Processing: pyproject.toml"
+        set -x
+    fi
+
     COUNT=0
     if (grep "$TEMPLATE_NAME" "$FILENAME" > /dev/null 2>&1); then
         MATCHES=$(grep -c "$TEMPLATE_NAME" "$FILENAME")
@@ -71,13 +92,14 @@ file_content_substitution() {
         fi
         sed -i "s/$ALT_TEMPLATE_NAME/$ALT_REPO_NAME/g" "$FILENAME"
     fi
-    echo "$COUNT total substitution(s) made in file: $FILENAME"
+    if [[ "$COUNT" != "0" ]] && [[ "$COUNT" = "1" ]]; then
+        echo "$COUNT substitution made in file: $FILENAME"
+    elif [[ "$COUNT" != "0" ]] && [[ "$COUNT" -gt "1" ]]; then
+        echo "$COUNT substitutions made in file: $FILENAME"
+    fi
 }
 
 ### Main script entry point
-
-TEMPLATE_NAME=osc-inception-converter
-ALT_TEMPLATE_NAME="${TEMPLATE_NAME//-/_}"
 
 if ! (git rev-parse --show-toplevel > /dev/null); then
     echo "Error: this folder is not part of a GIT repository"; exit 1
