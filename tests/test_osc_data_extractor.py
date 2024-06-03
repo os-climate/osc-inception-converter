@@ -1,4 +1,5 @@
 import pytest
+
 from osc_inception_converter.skeleton import fib, main
 
 __author__ = "Matthew Watkins"
