@@ -1,0 +1,21 @@
+osc\_inception\_converter package
+=================================
+
+Submodules
+----------
+
+osc\_inception\_converter.skeleton module
+-----------------------------------------
+
+.. automodule:: osc_inception_converter.skeleton
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: osc_inception_converter
+   :members:
+   :undoc-members:
+   :show-inheritance:
